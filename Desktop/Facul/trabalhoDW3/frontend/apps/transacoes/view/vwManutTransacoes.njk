@@ -1,0 +1,83 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+
+  <ol class="breadcrumb mb-2">
+    <li class="breadcrumb-item active">{{title}}</li>
+  </ol>
+  <div class="row">
+    <div class="col-xl-12">
+
+      <div class="card-header">
+        Manutenção de Transações
+      </div>
+
+      <div class="card-body">
+        <div class="">
+          <div style="margin-bottom: 15px;">
+            <a href="/transacoes/insertTransacoes" class="btn btn-primary">
+              Inserir nova Transação
+            </a>
+          </div>
+
+          <div style="background-color: #f8f9fa">
+            <table id="tabTransacoes" class="display" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Ação</th>
+                  <th>Data</th>
+                  <th>Descrição</th>
+                  <th>Valor</th>
+                  <th>Tipo</th>
+                  <th>Conta (Banco)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for reg in data %}
+                  <tr>
+                    <td>
+                      {# Link para visualização dos dados #}
+                      <a href="/transacoes/ViewTransacao/{{ reg.idtransacoes }}" title="Visualizar">
+                        <i class="fas fa-search"></i>
+                      </a>
+
+                      {# Link para atualização e remoção dos dados#}
+                      <a href="/transacoes/UpdateTransacao/{{ reg.idtransacoes }}" title="Atualizar" style="margin-left: 10px;">
+                        <i class="fas fa-pencil-alt"></i>
+                      </a>
+                    </td>
+                    {# Campos da tabela TRANSACAO #}
+                    <td>{{reg.data_transacao}}</td>
+                    <td>{{reg.descricao}}</td>
+                    <td>R$ {{reg.valor}}</td>
+                    <td>{{reg.tipo_operacao}}</td>
+                    {# Campo Relacionado (vem da subquery no Model) #}
+                    <td>{{reg.nome_banco}}</td> 
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    window.onload = function () {
+      windowOnLoad();
+      //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
+      const localErro = "{{erro}}";
+      if (localErro != "") {
+        alert("[vwTransacoes|onload]Servidor retornou o erro:" + localErro);
+      }
+
+      // Inicializa o plugin DataTable com o novo ID da tabela
+      new DataTable('#tabTransacoes');
+    };
+  </script>
+
+{% endblock %}

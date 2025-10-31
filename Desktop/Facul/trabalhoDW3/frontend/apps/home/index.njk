@@ -1,0 +1,82 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+
+  <ol class="breadcrumb mb-2">
+    <li class="breadcrumb-item active">{{title}}</li>
+  </ol>
+  <div class="row">
+    <div class="col-xl-12">
+
+      <div class="card-header">
+        Manutenção de Contas Correntes
+      </div>
+
+      <div class="card-body">
+        <div class="">
+          <div style="margin-bottom: 15px;">
+            <a href="/contas/insertContas" class="btn btn-primary">
+              Inserir nova Conta
+            </a>
+          </div>
+
+          <div style="background-color: #f8f9fa">
+            <table id="tabContas" class="display" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Ação</th>
+                  <th>ID</th>
+                  <th>Banco</th>
+                  <th>Agência</th>
+                  <th>Número da Conta</th>
+                </tr>
+              </thead>
+              <tbody>
+                {# Loop para exibir os dados da tabela 'contas'. 'data' contém os registros retornados. #}
+                {% for reg in data %}
+                  <tr>
+                    <td>
+                      {# Link para visualização dos dados #}
+                      <a href="/contas/ViewConta/{{ reg.idconta }}" title="Visualizar">
+                        <i class="fas fa-search"></i>
+                      </a>
+
+                      {# Link para atualização e remoção dos dados#}
+                      <a href="/contas/UpdateConta/{{ reg.idconta }}" title="Atualizar" style="margin-left: 10px;">
+                        <i class="fas fa-pencil-alt"></i>
+                      </a>
+                    </td>
+                    {# Campos da tabela CONTA #}
+                    <td>{{reg.idconta}}</td>
+                    <td>{{reg.nome_banco}}</td>
+                    <td>{{reg.numero_agencia}}</td>
+                    <td>{{reg.numero_conta}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  window.onload = function () {
+    windowOnLoad();
+
+    //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
+    const localErro = "{{erro}}";
+    if (localErro != "") {
+      alert("[vwContas|onload]Servidor retornou o erro:" + localErro);
+    }
+    
+    // Inicializa a DataTable para a listagem
+    new DataTable('#tabContas');
+  };
+
+</script>
+
+{% endblock %}
